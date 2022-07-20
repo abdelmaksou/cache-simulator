@@ -1,0 +1,28 @@
+name: cache
+version: '1.0.0'
+summary: A simple cache simulator.
+description: The simulator can calculate hit and miss ratios for different type of caches.
+
+grade: stable
+confinement: strict
+base: core18
+
+apps:
+  cache:
+    command: cache
+
+parts:
+  cache:
+    plugin: cmake
+    build-snaps: [cmake/latest/edge] # We need cmake >= 3.11
+    override-build: |
+      /snap/bin/cmake \
+        -DCMAKE_INSTALL_PREFIX=$SNAPCRAFT_PART_INSTALL/usr/local \
+        -DCMAKE_BUILD_TYPE=Release \
+        $SNAPCRAFT_PART_SRC
+      make -j 4
+      make install
+
+passthrough:
+  title: cache
+  license: MIT
